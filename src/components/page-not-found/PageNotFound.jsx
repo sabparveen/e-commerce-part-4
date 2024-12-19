@@ -7,8 +7,10 @@ const PageNotFound = () => {
     <div className='d-flex justify-content-center align-items-center vh-100'>
       <Box>
         <Typography variant='h3'>Something’s wrong here...</Typography>
-        <Typography variant='body1'>We can’t find the page you’re looking for. <br />
-        Check out our help center or head back to home.</Typography>
+        <Typography variant='body1'>We can’t find the page you’re looking for. <br /></Typography>
+        <Typography variant='body1'> Check out our help center or head back to home.</Typography>
+        <Typography variant='body1'> Sory this is an error page</Typography>
+        <Typography variant='body1'>  we can not fonud your page ,go back.</Typography>
         <img className='w-50' src={error} alt="" />
       </Box>
         
