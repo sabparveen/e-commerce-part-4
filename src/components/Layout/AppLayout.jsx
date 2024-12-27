@@ -16,7 +16,7 @@ import Button from '@mui/material/Button';
 import ProdectsCard from '../prodect-card/ProdectsCard';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Badge, Menu, MenuItem } from '@mui/material';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, NavLink, Outlet } from 'react-router-dom';
 import CartList from '../cart-list/CartList';
 import { useSelector } from 'react-redux';
 import InventoryIcon from '@mui/icons-material/Inventory';
@@ -27,7 +27,12 @@ interface Props {
 
 
 const drawerWidth = 240;
-const navItems = ['Home', 'About', 'Contact'];
+const navItems = [
+  { id: 1, navItems: "Home", navLink: "/" },
+  { id: 2, navItems: "About", navLink: "/about" },
+  { id: 3, navItems: "Contact", navLink: "/contact" },
+];
+
 
 function AppLayout(props: Props) {
   const { window } = props;
@@ -36,13 +41,13 @@ function AppLayout(props: Props) {
   const open = Boolean(anchorEl);
 
   const [openCartList, setOpenCartList] = React.useState(false);
-  const {cartItems} = useSelector ((state)=> state.cart)
+  const { cartItems } = useSelector((state) => state.cart)
   // console.log(count, 'count');
-  
+
   const toggleCartLiist = (newOpen) => () => {
-      setOpenCartList(newOpen);
+    setOpenCartList(newOpen);
   }
-  
+
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
@@ -61,13 +66,16 @@ function AppLayout(props: Props) {
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={item} />
-            </ListItemButton>
-          </ListItem>
+          <Link key={item?.id} to={item?.navLink} style={{ textDecoration: 'none', color: 'inherit' }}>
+            <ListItem disablePadding>
+              <ListItemButton sx={{ textAlign: 'center' }}>
+                {/* Use item.navItems here */}
+                <ListItemText primary={item.navItems} />
+              </ListItemButton>
+            </ListItem>
+          </Link>
         ))}
-        
+
       </List>
     </Box>
   );
@@ -97,36 +105,36 @@ function AppLayout(props: Props) {
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }}>
-                {item}
-              </Button>
+              <Link key={item.id} to={item.navLink} style={{ textDecoration: 'none', color: '#fff' }}>
+                <Button sx={{ color: '#fff' }}>{item.navItems}</Button>
+              </Link>
             ))}
             <Badge badgeContent={cartItems?.length} color="secondary">
-              <InventoryIcon  sx={{cursor:'pointer'}} className='text-white' onClick={toggleCartLiist(true)} />
+              <InventoryIcon sx={{ cursor: 'pointer' }} className='text-white' onClick={toggleCartLiist(true)} />
             </Badge>
-      
-      <Button className='text-white'
-        id="basic-button"
-        aria-controls={true ? 'basic-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={true ? 'true' : undefined}
-        onClick={handleClick}
-      >
-       <AccountCircleIcon />
-      </Button>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-        }}
-      >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}><Link className='text-decoration-none' to='/sign-in'>My account</Link></MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
-      </Menu>
+
+            <Button className='text-white'
+              id="basic-button"
+              aria-controls={true ? 'basic-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={true ? 'true' : undefined}
+              onClick={handleClick}
+            >
+              <AccountCircleIcon />
+            </Button>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                'aria-labelledby': 'basic-button',
+              }}
+            >
+              <MenuItem onClick={handleClose}>Profile</MenuItem>
+              <MenuItem onClick={handleClose}><Link className='text-decoration-none' to='/sign-in'>My account</Link></MenuItem>
+              <MenuItem onClick={handleClose}>Logout</MenuItem>
+            </Menu>
           </Box>
         </Toolbar>
       </AppBar>
@@ -149,9 +157,9 @@ function AppLayout(props: Props) {
       </nav>
       <Box component="main" sx={{ p: 3 }}>
         <Toolbar />
-        <Outlet/>
+        <Outlet />
       </Box>
-      
+
       <CartList openCartList={openCartList} toggleCartLiist={toggleCartLiist} />
     </Box>
   );

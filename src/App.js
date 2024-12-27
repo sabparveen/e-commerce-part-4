@@ -10,6 +10,8 @@ import { Provider } from 'react-redux';
 import ProductDetails from './components/product-details/ProductDetails';
 import ProdectsCard from './components/prodect-card/ProdectsCard';
 
+
+
 function App() {
   const router = createBrowserRouter([
     {  path: "/", element: <AppLayout />,

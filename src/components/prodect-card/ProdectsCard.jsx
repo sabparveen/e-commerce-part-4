@@ -27,7 +27,7 @@ const ProdectsCard = () => {
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [categoryArr, setCategoryArr] = useState([]);
 
-  const dispatch = useDispatch ()
+  const dispatch = useDispatch()
 
   // const filterProducts = (categoryProduct) => {
   //   const filterByCategory = categoryProduct
@@ -42,7 +42,7 @@ const ProdectsCard = () => {
       : products;
     setUpdatedProductsArr(filterByCategory);
   };
-  
+
 
   useEffect(() => {
     const productsData = axios.get('https://fakestoreapi.com/products').then((data) => {
@@ -112,13 +112,13 @@ const ProdectsCard = () => {
                       <Typography variant="h6">${product.price}</Typography>
                       <Box>
                         <Tooltip title="Favorite" placement='top'>
-                          <FavoriteIcon className='text-primary' sx={{cursor:'pointer'}}/>
+                          <FavoriteIcon className='text-primary' sx={{ cursor: 'pointer' }} />
                         </Tooltip>
                         <Tooltip title='View Details' placement='top'>
                           <Link to={`/product-details/${product?.id}`}>
                             <VisibilityIcon className='mx-3 text-primary' /></Link>
                         </Tooltip>
-                        <Button className="my-3" variant="contained" onClick={()=>dispatch(addToCart(product))}><AddIcon /> Add
+                        <Button className="my-3" variant="contained" onClick={() => dispatch(addToCart(product))}><AddIcon /> Add
                         </Button>
                       </Box>
                     </Box>
