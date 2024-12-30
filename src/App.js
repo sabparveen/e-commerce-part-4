@@ -9,29 +9,35 @@ import { Store } from './store/Store';
 import { Provider } from 'react-redux';
 import ProductDetails from './components/product-details/ProductDetails';
 import ProdectsCard from './components/prodect-card/ProdectsCard';
+import ProtectRoute from './components/protect-route/ProtectRoute';
+
 
 
 
 function App() {
   const router = createBrowserRouter([
-    {  path: "/", element: <AppLayout />,
-      children:[{
-        path:'',
-        element: <ProdectsCard  />
+    {
+      path: "/", element: <ProtectRoute> <AppLayout /> </ProtectRoute>,
+      children: [{
+        path: '',
+        element: <ProtectRoute>
+          <ProdectsCard />
+        </ProtectRoute>
       },
-      {path:'/product-details/:product_id', element:<ProductDetails />},
-      {  path: "/sign-in", element: <SignIn />,  },
-      {  path: "/sign-up", element: <SignUp />, },
+      { path: '/product-details/:product_id', element: <ProductDetails /> },
+      { path: "/sign-in", element: <SignIn />, },
+      { path: "/sign-up", element: <SignUp />, },
       ],
-       errorElement: <PageNotFound />  },
-      //  {path:'/product-details/:product-id', element:<ProductDetails />},
-    
+      errorElement: <PageNotFound />
+    },
+    //  {path:'/product-details/:product-id', element:<ProductDetails />},
+
   ]);
   return (
     <div className="App">
       <Provider store={Store}>
-      <RouterProvider router={router} />
-    </Provider>
+        <RouterProvider router={router} />
+      </Provider>
     </div>
   );
 }

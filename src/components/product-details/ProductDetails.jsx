@@ -4,7 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import SkeletonProductDetails from './SkeletonProductDetails';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart } from '../../store/slices/cart/cartSlice'
+
 
 const ProductDetails = () => {
   const [product, setProduct] = useState({});
@@ -13,6 +15,8 @@ const ProductDetails = () => {
   const [ProductDetails, setProductDetails] = useState(null);
 
   const { cartItems } = useSelector((state) => state.cart);
+
+  const dispatch = useDispatch(); 
 
   useEffect(() => {
     axios
@@ -27,6 +31,8 @@ const ProductDetails = () => {
     const renderProduct = cartItems?.find((item) => item?.id == product_id);
     setProductDetails(renderProduct);
   }, [cartItems, product_id]);
+
+  const isExist = cartItems?.find((item) => item.id == product_id);
 
   return (
     <>
@@ -45,10 +51,13 @@ const ProductDetails = () => {
             <Box className='d-flex justify-content-between align-items-center'>
               <Box className="d-flex">
                 <Typography>${product?.price}</Typography>
-                <Typography className='mx-3'>Qty: {ProductDetails?.quantity}</Typography>
+                {isExist && <Typography className='mx-3'>
+                  Qty: {ProductDetails?.quantity}</Typography>}
               </Box>
               <Box>
-                <Button className="my-3" variant="contained"><AddIcon /> Add </Button>
+                <Button size='small' variant="contained" onClick={() => dispatch(addToCart(product))}>
+                  <AddIcon /> Add
+                </Button>
               </Box>
             </Box>
           </Box>

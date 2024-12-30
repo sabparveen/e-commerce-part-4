@@ -8,6 +8,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { addToCart } from '../../store/slices/cart/cartSlice';
 
+
 // import { addToCart } from '../../store/slices/cart/cartSlice'
 
 // Import Swiper styles

@@ -1,12 +1,13 @@
 import { Box, Button, InputAdornment, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { Controller, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import SignInImage from "../assets/signin-g.svg"
+import axios from 'axios';
 
 const schema = yup
   .object({
@@ -22,6 +23,23 @@ const SignIn = () => {
     },
     resolver: yupResolver(schema),
   })
+  const navigate = useNavigate();
+
+  const SignInHandler= (data) => {
+    const signInUser = async () => {
+     
+        const resp = await axios.post('https://api.escuelajs.co/api/v1/auth/login', data);
+
+        if (resp?.data?.access_token) {
+          localStorage.setItem('token', resp.data.access_token);
+          navigate('/');
+        }
+    
+    };
+
+    signInUser();
+  };
+
   return (
     <>
       <Box className='d-flex justify-content-center align-items-center vh-100'>
@@ -29,10 +47,7 @@ const SignIn = () => {
           <img src={SignInImage} alt="" />
         </Box>
         <Box>
-          <form onSubmit={handleSubmit((data) => {
-            console.log(data);
-
-          })}>
+          <form onSubmit={handleSubmit((data) => SignInHandler(data))}>
             <Box>
               <Typography className='fw-bold' variant='h4'>Sign in to E-Store</Typography>
               <Typography variant='h6'>Welcome to FreshCart! Enter your email to get started.</Typography>
