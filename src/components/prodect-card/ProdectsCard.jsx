@@ -8,7 +8,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { addToCart } from '../../store/slices/cart/cartSlice';
 
-
 // import { addToCart } from '../../store/slices/cart/cartSlice'
 
 // Import Swiper styles
@@ -21,21 +20,19 @@ import 'swiper/css/navigation';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import PaginationMUI from '@mui/material/Pagination';
 
 const ProdectsCard = () => {
   const [updatedProductsArr, setUpdatedProductsArr] = useState([]);
   const [products, setProducts] = useState([]);
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [categoryArr, setCategoryArr] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(updatedProductsArr.length/ itemsPerPage)
 
   const dispatch = useDispatch()
-
-  // const filterProducts = (categoryProduct) => {
-  //   const filterByCategory = categoryProduct
-  //     ? products.filter((item) => item.category?.name === categoryProduct.value)
-  //     : products;
-  //   setUpdatedProductsArr(filterByCategory);
-  // };
 
   const filterProducts = (categoryProduct) => {
     const filterByCategory = categoryProduct
@@ -79,7 +76,7 @@ const ProdectsCard = () => {
       <Grid container spacing={3} >
         {
           isLoadingData ? <Box className='mt-2'><CircularProgress size={40} /></Box> :
-            updatedProductsArr?.map((product) => (
+            updatedProductsArr.slice((currentPage - 1)* itemsPerPage, currentPage * itemsPerPage)?.map((product) => (
 
               <Grid Item sm={3} className='p-3'>
                 <Card key={product.id} >
@@ -95,20 +92,16 @@ const ProdectsCard = () => {
                     }}
                     navigation={false}
                     modules={[Autoplay, Pagination, Navigation]}
-                    className="mySwiper"
-                  >
-
-
+                    className="mySwiper">
                     <SwiperSlide className='text-center'>  <img width={'300px'} height={'400px'} src={product?.image} alt='' /></SwiperSlide>
                     <SwiperSlide className='text-center'>  <img width={'300px'} height={'400px'} src={product?.image} alt='' /></SwiperSlide>
-
                   </Swiper>
                   <Box className='p-3'>
                     <Typography variant='body1'>{product?.category?.name}</Typography>
                     <Tooltip title={product?.title} placement='top'>
                       <Typography variant="h5" className="mt-2">{product?.title?.length > 25 ? `${product?.title.slice(0, 25)}...` : product?.title}</Typography>
                     </Tooltip>
-                    <Rating name="read-only" value={product.rating.rate} readOnly />
+                    <Rating name="read-only" value={product?.rating?.rate} readOnly />
                     <Box className='d-flex justify-content-between align-items-center'>
                       <Typography variant="h6">${product.price}</Typography>
                       <Box>
@@ -130,6 +123,12 @@ const ProdectsCard = () => {
 
             ))}
       </Grid>
+
+     <Box className='d-flex justify-content-center my-4'>
+     <PaginationMUI onChange={(e,value)=>{
+      setCurrentPage(value);
+     }} count={totalPages} color="primary" />
+     </Box>
     </>
   )
 }
